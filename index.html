@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>VitaPod App</title>
+  <!-- PWA -->
+  <meta name="theme-color" content="#1B3D2F" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="VitaPod" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    html { background: #1B3D2F; }
+    html, body {
+      background: #1B3D2F;
+    }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #1B3D2F;
+      height: 100dvh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Safe-area background extension — covers the home-indicator zone */
+    #sa-bg {
+      position: fixed;
+      bottom: -120px;
+      left: 0;
+      right: 0;
+      height: 180px;
+      background: #1B3D2F;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    #app-viewport {
+      position: fixed;
+      inset: 0;
+    }
+
+    #root { width: 100%; height: 100%; }
+
+    /* hide scrollbars in webkit */
+    ::-webkit-scrollbar { display: none; }
+
+
+  </style>
+
+  <!-- ── Standalone-bundle asset manifest (code-referenced images) ── -->
+  <meta name="ext-resource-dependency" content="vitapod-logo.png" data-resource-id="vitapod-logo.png" />
+  <meta name="ext-resource-dependency" content="img/vitapod-logo-clean.png" data-resource-id="img/vitapod-logo-clean.png" />
+  <meta name="ext-resource-dependency" content="img/coffee-classic.png" data-resource-id="img/coffee-classic.png" />
+  <meta name="ext-resource-dependency" content="img/coffee-black.png" data-resource-id="img/coffee-black.png" />
+  <meta name="ext-resource-dependency" content="img/coffee-caramel.png" data-resource-id="img/coffee-caramel.png" />
+  <meta name="ext-resource-dependency" content="img/coffee-hazelnut.png" data-resource-id="img/coffee-hazelnut.png" />
+  <meta name="ext-resource-dependency" content="img/shake-chocolate.png" data-resource-id="img/shake-chocolate.png" />
+  <meta name="ext-resource-dependency" content="img/shake-strawberry.png" data-resource-id="img/shake-strawberry.png" />
+  <meta name="ext-resource-dependency" content="img/shake-vanilla.png" data-resource-id="img/shake-vanilla.png" />
+  <meta name="ext-resource-dependency" content="img/mocktail-berry.png" data-resource-id="img/mocktail-berry.png" />
+  <meta name="ext-resource-dependency" content="img/mocktail-matcha.png" data-resource-id="img/mocktail-matcha.png" />
+  <meta name="ext-resource-dependency" content="img/mocktail-citrus.png" data-resource-id="img/mocktail-citrus.png" />
+  <meta name="ext-resource-dependency" content="img/bowl-teriyaki.png" data-resource-id="img/bowl-teriyaki.png" />
+  <meta name="ext-resource-dependency" content="img/bowl-salmon.png" data-resource-id="img/bowl-salmon.png" />
+  <meta name="ext-resource-dependency" content="img/bowl-veggie.png" data-resource-id="img/bowl-veggie.png" />
+  <meta name="ext-resource-dependency" content="img/bowl-korean.png" data-resource-id="img/bowl-korean.png" />
+  <meta name="ext-resource-dependency" content="img/tapas-mediterranean.png" data-resource-id="img/tapas-mediterranean.png" />
+  <meta name="ext-resource-dependency" content="img/tapas-charcuterie.png" data-resource-id="img/tapas-charcuterie.png" />
+  <meta name="ext-resource-dependency" content="img/tapas-asian.png" data-resource-id="img/tapas-asian.png" />
+  <meta name="ext-resource-dependency" content="img/baked-muffin.png" data-resource-id="img/baked-muffin.png" />
+  <meta name="ext-resource-dependency" content="img/baked-cookie.png" data-resource-id="img/baked-cookie.png" />
+  <meta name="ext-resource-dependency" content="img/baked-croissant.png" data-resource-id="img/baked-croissant.png" />
+  <meta name="ext-resource-dependency" content="img/cake-carrot.png" data-resource-id="img/cake-carrot.png" />
+  <meta name="ext-resource-dependency" content="img/cake-chocolate.png" data-resource-id="img/cake-chocolate.png" />
+  <meta name="ext-resource-dependency" content="img/cake-lemon.png" data-resource-id="img/cake-lemon.png" />
+  <meta name="ext-resource-dependency" content="img/choc-dark.png" data-resource-id="img/choc-dark.png" />
+  <meta name="ext-resource-dependency" content="img/choc-oatmilk.png" data-resource-id="img/choc-oatmilk.png" />
+  <meta name="ext-resource-dependency" content="img/choc-espresso.png" data-resource-id="img/choc-espresso.png" />
+
+  <!-- Splash / no-JS fallback thumbnail -->
+  <template id="__bundler_thumbnail" data-bg-color="#1B3D2F">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#1B3D2F"/>
+      <g transform="translate(600 400)">
+        <rect x="-150" y="-110" width="300" height="220" rx="40" fill="none" stroke="#5CCC8A" stroke-width="18"/>
+        <circle cx="0" cy="0" r="58" fill="#5CCC8A"/>
+        <text x="0" y="190" font-family="DM Sans, sans-serif" font-size="62" font-weight="800" fill="#F5EDD6" text-anchor="middle">VitaPod</text>
+      </g>
+    </svg>
+  </template>
+</head>
+<body>
+
+  <div id="sa-bg"></div>
+  <div id="app-viewport"><div id="root"></div></div>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- starters -->
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+
+  <!-- VitaPod -->
+  <script src="vitapod-data.js?v=3"></script>
+  <script type="text/babel" src="vitapod-components.jsx?v=3"></script>
+  <script type="text/babel" src="vitapod-screens.jsx?v=3"></script>
+  <script type="text/babel" src="vitapod-onboarding.jsx?v=1"></script>
+  <script type="text/babel" src="vitapod-overlays.jsx?v=1"></script>
+
+  <!-- Main app -->
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // ── Splash Screen ──────────────────────────────────────────────────────────
+    function SplashScreen({ onDone }) {
+      const [progress, setProgress] = useState(0);
+      useEffect(() => {
+        // Keep body dark green during splash — no cleanup, OnboardingFlow takes over
+        if (window.setSaBg) window.setSaBg('#1B3D2F');
+      }, []);
+      useEffect(() => {
+        let p = 0;
+        const id = setInterval(() => {
+          p += 1;
+          setProgress(p);
+          if (p >= 100) { clearInterval(id); setTimeout(onDone, 320); }
+        }, 24);
+        return () => clearInterval(id);
+      }, []);
+      return (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 400,
+          background: '#1B3D2F',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '80px 32px 52px',
+          fontFamily: 'DM Sans, sans-serif',
+        }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+            <img src={(window.vpAsset || (x=>x))("vitapod-logo.png")} alt="VitaPod" style={{ width: 200, objectFit: 'contain' }} />
+            <div style={{ fontSize: 11, letterSpacing: '2px', color: 'rgba(245,237,214,0.38)', textTransform: 'uppercase', textAlign: 'center', marginTop: 6 }}>
+              Real food. Conveniently packaged.
+            </div>
+          </div>
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 10, letterSpacing: '2px', color: 'rgba(245,237,214,0.38)', textTransform: 'uppercase' }}>
+              Loading menu
+              <span style={{ color: '#5CCC8A', fontWeight: 700, fontSize: 13, letterSpacing: 0 }}>{progress}%</span>
+            </div>
+            <div style={{ width: '100%', height: 2, background: 'rgba(255,255,255,0.1)', borderRadius: 99 }}>
+              <div style={{ width: `${progress}%`, height: '100%', background: '#5CCC8A', borderRadius: 99, transition: 'width 0.03s linear' }} />
+            </div>
+            <button onClick={onDone} style={{ marginTop: 12, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 99, cursor: 'pointer', color: 'rgba(245,237,214,0.8)', fontSize: 13, fontWeight: 600, fontFamily: 'inherit', padding: '8px 24px', letterSpacing: '0.3px' }}>Skip Intro</button>
+          </div>
+        </div>
+      );
+    }
+
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "accentColor": "#5CCC8A",
+      "userName": "Nadine"
+    }/*EDITMODE-END*/;
+
+    function App() {
+      const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+      const [splashDone, setSplashDone] = useState(false);
+      const [onboarded, setOnboarded] = useState(() => localStorage.getItem('vp_onboarded') === 'true');
+      const [activeTab, setActiveTab] = useState('home');
+      const [prefs, setPrefs] = useState(() => {
+        try { const s = localStorage.getItem('vp_prefs'); return s ? JSON.parse(s) : { vegan: false, glutenFree: false, highProtein: false }; } catch(e) { return { vegan: false, glutenFree: false, highProtein: false }; }
+      });
+      const [cart, setCart] = useState({});
+      const [cartForCheckout, setCartForCheckout] = useState({});
+      const [fading, setFading] = useState(false);
+      const [overlay, setOverlay] = useState(null);
+
+
+
+      // Restore saved name on first mount
+      useEffect(() => {
+        const saved = localStorage.getItem('vp_user_name');
+        if (saved) { window.VP.user.name = saved; }
+      }, []);
+
+      // Sync tweak userName → VP
+      useEffect(() => {
+        window.VP.user.name = t.userName;
+      }, [t.userName]);
+
+      // Persist prefs
+      useEffect(() => {
+        try { localStorage.setItem('vp_prefs', JSON.stringify(prefs)); } catch(e) {}
+      }, [prefs]);
+
+      const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
+
+      function handleTabChange(tab) {
+        if (tab === activeTab) return;
+        setFading(true);
+        setTimeout(() => { setActiveTab(tab); setFading(false); }, 120);
+      }
+
+      function handleAdd(product) {
+        setCart(c => ({ ...c, [product.id]: (c[product.id] || 0) + 1 }));
+      }
+
+      function findCat(product) {
+        for (const cat of window.VP.categories) {
+          if (cat.products.find(p => p.id === product.id)) return cat;
+        }
+        return window.VP.categories[0];
+      }
+
+      function openProduct(product, cat) {
+        setOverlay({ type: 'product', data: { product, cat: cat || findCat(product) } });
+      }
+
+      function handleOnboardingComplete(name, selectedPrefsArr) {
+        const finalName = name || 'Friend';
+        localStorage.setItem('vp_onboarded', 'true');
+        localStorage.setItem('vp_user_name', finalName);
+        window.VP.user.name = finalName;
+        setTweak('userName', finalName);
+        // Sync dietary prefs chosen in onboarding (skip if 'everything' chosen)
+        if (!selectedPrefsArr.includes('everything') && selectedPrefsArr.length > 0) {
+          setPrefs({
+            vegan:       selectedPrefsArr.includes('vegan'),
+            glutenFree:  selectedPrefsArr.includes('glutenFree'),
+            highProtein: selectedPrefsArr.includes('highProtein'),
+          });
+        }
+        setOnboarded(true);
+      }
+
+      const screenStyle = {
+        opacity: fading ? 0 : 1,
+        transform: fading ? 'translateY(5px)' : 'translateY(0)',
+        transition: 'opacity 0.15s ease, transform 0.15s ease',
+        flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column',
+      };
+
+      return (
+        <>
+          <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', background: '#F9FAF4', fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+
+              {/* Main screens */}
+              <div style={screenStyle}>
+                {activeTab === 'home'    && <HomeScreen    onTabChange={handleTabChange} onAdd={handleAdd} onOpenScanner={() => setOverlay({ type: 'loyaltyQR' })} onProductTap={openProduct} prefs={prefs} onNotifTap={() => setOverlay({ type: 'notifications' })} />}
+                {activeTab === 'menu'    && <MenuScreen    onAdd={handleAdd} cartCount={cartCount} onOpenCart={() => setOverlay({ type: 'cart' })} onProductTap={openProduct} prefs={prefs} />}
+                {activeTab === 'map'     && <MapScreen />}
+                {activeTab === 'rewards' && <RewardsScreen />}
+                {activeTab === 'profile' && <ProfileScreen onNavigate={(key) => setOverlay({ type: 'settings.' + key })} prefs={prefs} onPrefsChange={setPrefs} />}
+              </div>
+              <TabBar active={activeTab} onChange={handleTabChange} cartCount={cartCount} />
+
+              {/* Floating QR button — home screen only, no overlay open */}
+              {onboarded && activeTab === 'home' && !overlay && (
+                <button onClick={() => setOverlay({ type: 'loyaltyQR' })} style={{
+                  position: 'absolute', bottom: 'calc(env(safe-area-inset-bottom, 6px) + 62px)', left: '50%', transform: 'translateX(-50%)',
+                  width: 52, height: 52, borderRadius: 99, border: 'none',
+                  background: '#5CCC8A', cursor: 'pointer', zIndex: 20,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 4px 22px rgba(92,204,138,0.55)',
+                }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round">
+                    <path d="M3 7V4h3M21 7V4h-3M3 17v3h3M21 17v3h-3"/>
+                    <rect x="9" y="9" width="6" height="6" rx="1" fill="white" stroke="none"/>
+                  </svg>
+                </button>
+              )}
+
+              {/* Onboarding overlay */}
+              {!onboarded && <OnboardingFlow onComplete={handleOnboardingComplete} />}
+
+              {/* Splash screen — always first on load */}
+              {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
+
+              {/* ── Overlays ── */}
+              {overlay && overlay.type === 'product' && (
+                <ProductDetailSheet
+                  product={overlay.data.product}
+                  cat={overlay.data.cat}
+                  onClose={() => setOverlay(null)}
+                  onAdd={handleAdd}
+                />
+              )}
+              {overlay && overlay.type === 'cart' && (
+                <CartScreen
+                  cart={cart}
+                  onClose={(updated) => { if (updated) setCart(updated); setOverlay(null); }}
+                  onCheckout={(local, loc) => { setCart(local); setCartForCheckout(local); setOverlay({ type: 'payment', loc }); }}
+                />
+              )}
+              {overlay && overlay.type === 'payment' && (
+                <PaymentScreen
+                  cart={cartForCheckout}
+                  onClose={() => setOverlay({ type: 'cart' })}
+                  onOrderPlaced={() => { setCart({}); setOverlay({ type: 'orderConfirmed' }); }}
+                />
+              )}
+              {overlay && overlay.type === 'orderConfirmed' && (
+                <OrderConfirmedScreen
+                  onDone={() => { setOverlay(null); handleTabChange('home'); }}
+                  onShowQR={() => setOverlay({ type: 'loyaltyQR' })}
+                />
+              )}
+              {overlay && overlay.type === 'loyaltyQR' && (
+                <LoyaltyQRScreen onClose={() => setOverlay(null)} />
+              )}
+              {overlay && overlay.type === 'orderReady' && (
+                <OrderReadyScreen onClose={() => setOverlay(null)} />
+              )}
+              {overlay && overlay.type === 'settings.payment'       && <PaymentMethodsScreen  onBack={() => setOverlay(null)} />}
+              {overlay && overlay.type === 'settings.notifications' && <NotificationsScreen   onBack={() => setOverlay(null)} />}
+              {overlay && overlay.type === 'settings.language'      && <LanguageScreen        onBack={() => setOverlay(null)} />}
+              {overlay && overlay.type === 'settings.help'          && <HelpSupportScreen     onBack={() => setOverlay(null)} />}
+              {overlay && overlay.type === 'settings.privacy'       && <PrivacyPolicyScreen   onBack={() => setOverlay(null)} />}
+              {overlay && overlay.type === 'notifications'             && <NotificationPanel     onClose={() => setOverlay(null)} />}
+
+          </div>
+
+          <TweaksPanel title="VitaPod Tweaks">
+            <TweakSection label="Personalise" />
+            <TweakText    label="User name" value={t.userName} onChange={v => setTweak('userName', v)} />
+            <TweakSection label="Brand" />
+            <TweakColor   label="Accent colour" value={t.accentColor}
+                          options={['#5CCC8A', '#3BB87A', '#7AD4A8', '#A8CC5A']}
+                          onChange={v => setTweak('accentColor', v)} />
+            <TweakSection label="Debug" />
+            <TweakButton  label="Reset onboarding" onClick={() => { localStorage.removeItem('vp_onboarded'); localStorage.removeItem('vp_user_name'); window.location.reload(); }} />
+          </TweaksPanel>
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+  <script>
+    // Dynamic safe-area background filler for iOS standalone mode
+    window.setSaBg = function(color) {
+      var el = document.getElementById('sa-bg');
+      if (el) el.style.background = color;
+      document.documentElement.style.background = color;
+      document.body.style.background = color;
+    };
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('./sw.js')
+          .catch(function (e) { console.warn('SW registration failed:', e); });
+      });
+    }
+  </script>
+</body>
+</html>
